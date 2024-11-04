@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thai Stucco Period Classifier</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300&display=swap');
+
+        * {
+            font-family: 'Kanit', sans-serif;
+        }
+        img{
+            max-width:400px;
+            max-height:400px;
+        }
+        .padd{
+            padding: 30px;  
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .description {
+            overflow: hidden;
+            max-height: 0.5em; /* Approximately 3 lines */
+            position: relative;
+            line-height: 1.5em;
+        }
+        .description.expanded {
+            max-height: none;
+        }
+        .see-more {
+            display: block;
+            text-align: center;
+            cursor: pointer;
+            color: #007bff;
+            margin-top: 10px;
+        }
+        .selected-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            display: none; /* Initially hide the image */
+            border: 5px solid #00437ad5; /* Light gray border for the frame */
+            padding: 5px; /* Space between image and border */
+            border-radius: 10px; /* Rounded corners */
+            background-color: white; /* Background for padding area */
+            /* margin-bottom: 10px; */
+            margin-bottom: 85px;
+            margin-top: 85px;
+            margin-left: 50px;
+        }
+        .custom-file-label {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            margin-bottom: 3;
+            padding-bottom: 3;
+            padding-top: 30;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            
+            text-align: center;
+            
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            
+        }
+        .loading-circle {
+            position: absolute;
+            top: 50%;
+            left: 72.5%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ccc;
+            border-top: 5px solid #333;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title text-center"><strong>Thai Stucco Period Classifier</strong> </h1>
+                <h2 class="card-title text-center">โปรแกรมจำแนกยุคสมัยประติมากรรมลวดลายปูนปั้นไทย</h2>
+                <p style="text-indent: 2.5em;"> 
+                <span id="dots"><strong>โครงงานการจำแนกยุคสมัยลวดลายปูนไทย</strong> หรือ <strong>Thai Stucco Period Classifier</strong> เป็นโครงงาน...</span>
+                <div id="more" style="display: none;">
+                    <p style="text-indent: 2em;"><strong>โครงงานการจำแนกยุคสมัยลวดลายปูนไทย</strong> หรือ <strong>Thai Stucco Period Classifier</strong> เป็นโครงงานที่มุ่งเน้นการสร้างระบบการจำแนกยุคสมัยของงานปูนปั้นไทย โดยใช้เทคโนโลยีการเรียนรู้เชิงลึก (Deep Learning) และวิธีการประมวลผลภาพ (Image Processing) เพื่อช่วยในการวิเคราะห์และจัดหมวดหมู่ศิลปะปูนปั้นตามยุคสมัยต่างๆ ของไทย</p>
+                    <p style="text-indent: 2em;"><strong>ปูนปั้น</strong> เป็นสิ่งประดิษฐ์จากวัสดุประเภทปูนโดยผสมกับวัสดุมวลรวมอื่นเช่นทราย น้ำ เป็นต้น จะทำการประดิษฐ์ในขณะที่วัสดุผสมนั้นเปียก และจะแข็งตัวเมื่อแห้ง จัดเป็นศิลปะประเภทประติมากรรม แต่มีข้อแตกต่างกับประติมากรรมทั่วไป คือประดิษฐ์จากวัสดุประเภทปูนเท่านั้น มักใช้เป็นส่วนประดับตกแต่งของศาสนสถาน อาคาร อนุสาวรีย์ ตลอดจนทำเป็นส่วนประกอบทางสถาปัตยกรรม ถือเป็นงานทางศิลปกรรมของช่างไทยที่สำคัญอย่างหนึ่ง และปรากฏมีมาตั้งแต่สมัยโบราณ</p>
+                    <p style="text-indent: 2em;">จุดประสงค์หลักของโครงงานนี้คือการพัฒนาระบบที่สามารถจำแนกยุคสมัยของงานปูนปั้นไทยได้ ซึ่งจะช่วยให้นักวิจัย ศิลปิน และบุคคลทั่วไปที่สนใจในศิลปะไทยสามารถเข้าใจและศึกษาเกี่ยวกับศิลปะปูนปั้นไทยได้ง่ายขึ้น</p> 
+                    <p style="text-indent: 2em;">ระบบนี้จะใช้ภาพถ่ายงานปูนปั้นจากยุคสมัยสุโขทัย อยุธยาตอนต้น อยุธยาตอนกลาง อยุธยาตอนปลาย และยุครัตนโกสินทร์ เพื่อฝึกระบบการเรียนรู้ของเครื่องให้สามารถจำแนกความแตกต่างของลักษณะรูปแบบของแต่ละยุคสมัยได้</p>
+                    <p style="text-indent: 2em;">ท้ายที่สุดนี้หวังว่าโครงงานการจำแนกยุคสมัยลวดลายปูนไทย จะเป็นเครื่องมือที่มีประโยชน์สำหรับการศึกษาศิลปะไทยในยุคดิจิทัลได้ครับ</p>
+                </div>
+                </p>
+                <button onclick="toggleReadMore()" id="myBtn" class="btn btn-link">เพิ่มเติม</button>
+                <form id="uploadForm" class="mt-4">
+                    <div class="row">
+                        <!-- Image preview area -->
+                        <div class="col-md-6">
+                            <h3 class="custom-file-label">เลือกไฟล์ภาพลวดลายปูนปั้นที่ต้องการ</h3>
+                            <label for="fileInput"
+                            class="input-group-text btn btn-primary w-100 mb-3">
+                              เลือกภาพ
+                            </label>
+                            <input type="file" class="form-control mb-3" id="fileInput" accept="image/*" required>
+                            <img id="imagePreview" class="selected-image" alt="Selected Image Preview">
+                            <!-- Add a button to rotate the image -->
+                            <!-- Add a dropdown menu to select the rotation angle -->
+                            <select id="rotationSelect" class="form-select w-100 mb-3">
+                                <option value="0">ไม่หมุน</option>
+                                <option value="90">หมุน 90 องศา</option>
+                                <option value="180">หมุน 180 องศา</option>
+                                <option value="270">หมุน 270 องศา</option>
+                            </select>
+                        </div>
+                        <!-- Prediction results area -->
+                        <div class="col-md-6">
+                            <h3 class="custom-file-label">อัพโหลดภาพเพื่อทำนาย</h3>
+                            <button type="submit" class="btn btn-primary w-100 mb-3">ทำนายผล</button>
+                            <div class="prediction mt-4" id="prediction"></div>
+                            <div class="loading-circle" style="display: none;"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imagePreview = document.getElementById('imagePreview');
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block'; // Show the image
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        const button = document.getElementById("myButton");
+        const loadingCircle = document.querySelector(".loading-circle");
+        const predictionn = document.querySelector(".prediction");
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            loadingCircle.style.display = "block";
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert("โปรดอัพโหลดไฟล์ภาพก่อน!");
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            
+            const predictionDiv = document.getElementById('prediction');
+            predictionDiv.innerHTML = '';
+
+        if (response.ok) {
+            
+            const predictedResults = result.predicted_result;
+            let topEra;
+            let topProbability = 0;
+
+            predictedResults.forEach((item) => {
+            const probability = parseFloat(item.probability);
+            if (probability > topProbability) {
+                topProbability = probability;
+                topEra = item.number;
+            }
+            });
+            var delayInMilliseconds = 500; //1 second
+            
+            setTimeout(function() {
+            //your code to be executed after 1 second
+            
+            topProbability = topProbability.toFixed(2);
+            // Sort the results to find the one with the highest probability
+            // const topPrediction = predictedResults.sort((a, b) => b.probability - a.probability)[0];
+            // const topEra = topPrediction.number;
+            // const topProbability = parseFloat(topPrediction.probability).toFixed(2); // Ensures two decimal places
+
+            // Display the top prediction
+            let html = `<div class="card" >
+                        <h2 class="text-center"><strong>ผลการทำนาย:</strong></h2>
+                        <h3 class="text-center">เป็น ${topEra} ที่ความมั่นใจ ${topProbability}%</h3>
+                    </div>`;
+        
+            // Optionally, you can still list all predictions below the top one
+            html += '<ul class="list-group mt-4">';
+        
+        // Define a set of colors for each progress bar
+        const colors = ['#b33030', '#dbc604', '#459c2a', '#1ca9ad', '#1d1fa8', '#870f7f']; // Custom colors
+        
+            predictedResults.forEach((item, index) => {
+                const probability = parseFloat(item.probability).toFixed(2); // Ensures two decimal places
+                const color = colors[index % colors.length]; // Rotate colors if more than defined colors
+                html += `
+                    <li class="list-group-item" >
+                        <strong>${item.number}</strong>: ${probability}%
+                        <div class="progress mt-2">
+                            <div   div class="progress-bar" role="progressbar" style="width: ${probability}%; background-color: ${color};" aria-valuenow="${probability}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </li>
+                    `;
+            });
+
+            html += '</ul>';
+            predictionDiv.innerHTML = html;
+            loadingCircle.style.display = "none";
+            predictionn.style.display = "block";
+        }, delayInMilliseconds);
+        } else {
+            predictionDiv.innerHTML = `<div class="alert alert-danger" role="alert">Error: ${result.error}</div>`;
+            }
+        });
+
+        function toggleReadMore() {
+        var dots = document.getElementById("dots");
+        var moreText = document.getElementById("more");
+        var btnText = document.getElementById("myBtn");
+
+        if (dots.style.display === "none") {
+            dots.style.display = "inline";
+            btnText.innerHTML = "เพิ่มเติม"; 
+            moreText.style.display = "none";
+        } else {
+            dots.style.display = "none";
+            btnText.innerHTML = "ลดลง"; 
+            moreText.style.display = "inline";
+        }
+    }
+        // Get the dropdown menu element
+    const rotationSelect = document.getElementById('rotationSelect');
+
+    // Add an event listener to the dropdown menu
+    rotationSelect.addEventListener('change', function() {
+        // Get the selected rotation angle
+        const selectedAngle = parseInt(rotationSelect.value);
+        // Rotate the image by the selected angle
+        imagePreview.style.transform = `rotate(${selectedAngle}deg)`;
+    });
+    </script>
+</body>
+</html>
